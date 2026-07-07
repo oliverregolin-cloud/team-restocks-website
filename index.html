@@ -8,11 +8,13 @@
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 
 <div class="bg-glow"></div>
+<div class="bg-grid"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <header class="site-header" id="header">
   <div class="container header-inner">
@@ -23,9 +25,10 @@
 
     <nav class="main-nav" id="mainNav">
       <a href="#about">Über uns</a>
+      <a href="#process">Ablauf</a>
       <a href="#features">Leistungen</a>
-      <a href="#community">Community</a>
-      <a href="#instagram">Instagram</a>
+      <a href="#pings">Pings</a>
+      <a href="#faq">FAQ</a>
       <a href="#join" class="nav-cta">Discord beitreten</a>
     </nav>
 
@@ -40,16 +43,16 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container hero-inner">
-      <img src="assets/logo.png" alt="Team Restocks Logo" class="hero-logo">
-      <p class="eyebrow">📈 Pokémon TCG Alerts &amp; Market Updates</p>
-      <h1>Verpasse nie wieder<br><span class="text-gold">einen Restock.</span></h1>
-      <p class="hero-sub">
+      <img src="assets/logo.png" alt="Team Restocks Logo" class="hero-logo float">
+      <p class="eyebrow reveal">📈 Pokémon TCG Alerts &amp; Market Updates</p>
+      <h1 class="reveal">Verpasse nie wieder<br><span class="text-gold">einen Restock.</span></h1>
+      <p class="hero-sub reveal">
         🔥 Restocks · Neue Releases · Deals &nbsp;—&nbsp; 💎 Für Sammler, Investoren &amp; Reseller.
-        Team Restocks überwacht den Pokémon&nbsp;TCG-Markt in Echtzeit, damit du deinem nächsten Drop
-        immer einen Schritt voraus bist.
+        Team Restocks überwacht Pokémon, One&nbsp;Piece &amp; Magic: The Gathering in Echtzeit, damit du deinem
+        nächsten Drop immer einen Schritt voraus bist.
       </p>
-      <div class="hero-actions">
-        <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary">
+      <div class="hero-actions reveal">
+        <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary btn-pulse">
           <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path fill="currentColor" d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.211.375-.457.883-.626 1.284a18.27 18.27 0 0 0-5.518 0A12.6 12.6 0 0 0 9.115 3a19.74 19.74 0 0 0-4.435 1.372C1.914 8.5 1.107 12.53 1.454 16.502a19.9 19.9 0 0 0 5.993 3.03c.483-.66.913-1.36 1.284-2.098a12.9 12.9 0 0 1-2.023-.973c.17-.124.336-.253.497-.386 3.902 1.8 8.13 1.8 11.986 0 .163.133.329.262.497.386-.645.386-1.324.71-2.027.976.373.738.803 1.437 1.285 2.096a19.83 19.83 0 0 0 6-3.03c.5-4.6-.72-8.598-3.63-12.134ZM8.68 14.081c-1.17 0-2.13-1.075-2.13-2.396 0-1.32.94-2.398 2.13-2.398 1.19 0 2.15 1.078 2.13 2.398 0 1.321-.94 2.396-2.13 2.396Zm6.64 0c-1.17 0-2.13-1.075-2.13-2.396 0-1.32.94-2.398 2.13-2.398 1.19 0 2.15 1.078 2.13 2.398 0 1.321-.93 2.396-2.13 2.396Z"/></svg>
           Discord beitreten
         </a>
@@ -59,10 +62,11 @@
         </a>
       </div>
 
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-num">641+</span><span class="stat-label">Follower</span></div>
-        <div class="stat"><span class="stat-num">200+</span><span class="stat-label">überwachte Stores</span></div>
-        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Support</span></div>
+      <div class="hero-stats reveal">
+        <div class="stat"><span class="stat-num" data-count="390" data-suffix="+">0</span><span class="stat-label">Mitglieder</span></div>
+        <div class="stat"><span class="stat-num" data-count="200" data-suffix="+">0</span><span class="stat-label">überwachte Stores</span></div>
+        <div class="stat"><span class="stat-num" data-static="24/7">0</span><span class="stat-label">Support</span></div>
+        <div class="stat"><span class="stat-num" data-static="2023">0</span><span class="stat-label">Gegründet</span></div>
       </div>
     </div>
   </section>
@@ -70,9 +74,9 @@
   <!-- ABOUT -->
   <section id="about" class="section">
     <div class="container">
-      <p class="kicker">Über uns</p>
-      <h2>Dein Vorsprung bei jedem Drop.</h2>
-      <p class="section-lead">
+      <p class="kicker reveal">Über uns</p>
+      <h2 class="reveal">Dein Vorsprung bei jedem Drop.</h2>
+      <p class="section-lead reveal">
         Team Restocks steht hinter der <strong>Card Cartel Crew</strong> Community — einem Treffpunkt für alle,
         die den Pokémon&nbsp;TCG-Markt im Blick behalten wollen. Egal ob du Karten sammelst, in Displays investierst
         oder als Reseller unterwegs bist: Wir sorgen dafür, dass du Restocks, News und Deals als Erster mitbekommst.
@@ -80,61 +84,222 @@
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section id="features" class="section section-alt">
+  <!-- PROCESS -->
+  <section id="process" class="section section-alt">
     <div class="container">
-      <p class="kicker">Leistungen</p>
-      <h2>Was wir bieten</h2>
+      <p class="kicker reveal">Ablauf</p>
+      <h2 class="reveal">Von null zum Restock.</h2>
+      <p class="section-lead reveal">Drei Schritte, dann verpasst du keinen Drop mehr.</p>
 
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🛰️</div>
-          <h3>Monitoring von 200+ Stores</h3>
-          <p>Wir überwachen laufend über 200 Pokémon-Stores auf Lagerbestand und neue Drops.</p>
+      <div class="process-grid">
+        <div class="process-card reveal">
+          <span class="process-num">01</span>
+          <div class="process-icon">💬</div>
+          <h3>Discord beitreten</h3>
+          <p>Werde in Sekunden Teil von Team Restocks — kostenlos und ohne Vorkenntnisse.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔔</div>
-          <h3>Restock-Alerts in Echtzeit</h3>
-          <p>Sobald ein Produkt wieder verfügbar ist, landet der Alert sofort in deinem Discord.</p>
+        <div class="process-card reveal">
+          <span class="process-num">02</span>
+          <div class="process-icon">🔔</div>
+          <h3>Restock-Ping erhalten</h3>
+          <p>Unsere Monitore scannen 200+ Stores rund um die Uhr und pingen dich in Echtzeit an.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Instant Stock Checker</h3>
-          <p>Prüfe den aktuellen Bestand deiner Wunschprodukte auf Knopfdruck.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🏬</div>
-          <h3>Exklusive Instore-Infos</h3>
-          <p>Insider-Infos zu Filial-Restocks, die online nicht sichtbar sind.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📰</div>
-          <h3>TCG News &amp; Updates</h3>
-          <p>Neuigkeiten zu kommenden Sets, Tins und Sonder-Releases — direkt und kompakt.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🕐</div>
-          <h3>24/7 Support</h3>
-          <p>Unser Team ist rund um die Uhr für Fragen rund um Restocks &amp; Bestellungen erreichbar.</p>
+        <div class="process-card reveal">
+          <span class="process-num">03</span>
+          <div class="process-icon">🎯</div>
+          <h3>Zuschlagen &amp; sichern</h3>
+          <p>Mit Direktlinks und Instore-Infos sicherst du dir dein Produkt, bevor es ausverkauft ist.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- FEATURES -->
+  <section id="features" class="section">
+    <div class="container">
+      <p class="kicker reveal">Leistungen</p>
+      <h2 class="reveal">Was wir bieten</h2>
+
+      <div class="feature-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">🛰️</div>
+          <h3>Monitoring von 200+ Stores</h3>
+          <p>Wir überwachen laufend über 200 Stores in DE &amp; EU auf Lagerbestand und neue Drops.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🔔</div>
+          <h3>Restock-Alerts in Echtzeit</h3>
+          <p>Sobald ein Produkt wieder verfügbar ist, landet der Alert sofort in deinem Discord.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🃏</div>
+          <h3>Pokémon, One Piece &amp; Magic</h3>
+          <p>Eigene Monitor-Channels für Pokémon TCG, One Piece TCG und Magic: The Gathering.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🏬</div>
+          <h3>Exklusive Instore-Infos</h3>
+          <p>Insider-Infos zu Filial-Restocks, die online nicht sichtbar sind.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🌐</div>
+          <h3>MyDealz &amp; Reddit Deals</h3>
+          <p>Zusätzliche Deal-Feeds aus MyDealz und Reddit direkt in eigenen Channels gebündelt.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🕐</div>
+          <h3>24/7 Support</h3>
+          <p>Unser Team ist rund um die Uhr für Fragen rund um Restocks &amp; Bestellungen erreichbar.</p>
+        </div>
+      </div>
+
+      <div class="regions reveal">
+        <p class="regions-label">Abgedeckte Regionen</p>
+        <div class="regions-flags">
+          <span class="flag-pill">🇩🇪 Deutschland</span>
+          <span class="flag-pill">🇦🇹 Österreich</span>
+          <span class="flag-pill">🇨🇭 Schweiz</span>
+          <span class="flag-pill">🇪🇺 weitere EU-Länder</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PINGS DEMO -->
+  <section id="pings" class="section section-alt">
+    <div class="container pings-inner">
+      <div class="pings-text">
+        <p class="kicker reveal">Live-Beispiel</p>
+        <h2 class="reveal">Blitzschnelle Monitore &amp; Pings.</h2>
+        <p class="section-lead reveal">
+          Unsere Monitore scannen den Markt 24/7 und pingen dich, sobald ein Produkt reinkommt —
+          mit Produktbild, Kategorie, Preis und direktem Link.
+        </p>
+        <ul class="checklist reveal">
+          <li>Sofort-Benachrichtigung bei Restock oder Preisfehler</li>
+          <li>Eigene Channels je Kategorie &amp; Region</li>
+          <li>Direktlinks zum schnellen Sichern</li>
+        </ul>
+      </div>
+
+      <div class="discord-window reveal">
+        <div class="discord-titlebar">
+          <span class="discord-hash">#</span>
+          <span class="discord-channel">pings</span>
+          <span class="discord-sub">Alle Restocks an einem Ort</span>
+        </div>
+        <div class="discord-messages">
+          <div class="discord-msg">
+            <img src="assets/logo.png" class="discord-avatar" alt="Team Restocks Bot">
+            <div class="discord-msg-body">
+              <div class="discord-msg-head">
+                <span class="discord-user">Team Restocks <span class="discord-bot-tag">BOT</span></span>
+                <span class="discord-time">Heute um 10:12</span>
+              </div>
+              <div class="discord-embed">
+                <div class="discord-embed-title">Neues Produkt — Pokémon TCG</div>
+                <div class="discord-embed-main">
+                  <div class="discord-embed-fields">
+                    <div><span class="field-label">Produkt</span><span class="field-value">151 Boosterdisplay</span></div>
+                    <div><span class="field-label">Preis</span><span class="field-value">149,99&nbsp;€</span></div>
+                    <div><span class="field-label">Region</span><span class="field-value">🇩🇪 DE</span></div>
+                    <div><span class="field-label">Status</span><span class="field-value status-instock">INSTOCK</span></div>
+                  </div>
+                  <div class="discord-embed-thumb">📦</div>
+                </div>
+                <div class="discord-embed-footer">Team Restocks Monitor • Heute um 10:12</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="discord-msg">
+            <img src="assets/logo.png" class="discord-avatar" alt="Team Restocks Bot">
+            <div class="discord-msg-body">
+              <div class="discord-msg-head">
+                <span class="discord-user">Team Restocks <span class="discord-bot-tag">BOT</span></span>
+                <span class="discord-time">Heute um 10:47</span>
+              </div>
+              <div class="discord-embed">
+                <div class="discord-embed-title">Neues Produkt — One Piece TCG</div>
+                <div class="discord-embed-main">
+                  <div class="discord-embed-fields">
+                    <div><span class="field-label">Produkt</span><span class="field-value">OP-11 Display</span></div>
+                    <div><span class="field-label">Preis</span><span class="field-value">119,99&nbsp;€</span></div>
+                    <div><span class="field-label">Region</span><span class="field-value">🇪🇺 EU</span></div>
+                    <div><span class="field-label">Status</span><span class="field-value status-instock">INSTOCK</span></div>
+                  </div>
+                  <div class="discord-embed-thumb">🃏</div>
+                </div>
+                <div class="discord-embed-footer">Team Restocks Monitor • Heute um 10:47</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUCCESS DEMO -->
+  <section id="success" class="section">
+    <div class="container success-inner">
+      <div class="discord-window reveal order-2">
+        <div class="discord-titlebar">
+          <span class="discord-hash">✅</span>
+          <span class="discord-channel">success</span>
+          <span class="discord-sub">Show off your wins</span>
+        </div>
+        <div class="discord-messages">
+          <div class="discord-msg">
+            <div class="discord-avatar discord-avatar-generic">🧑‍🤝‍🧑</div>
+            <div class="discord-msg-body">
+              <div class="discord-msg-head">
+                <span class="discord-user">Community-Mitglied</span>
+                <span class="discord-time">Heute um 11:03</span>
+              </div>
+              <div class="discord-embed">
+                <div class="discord-embed-title">Bestellübersicht</div>
+                <div class="discord-order-row"><span>📦 151 Boosterdisplay × 1</span><span>149,99&nbsp;€</span></div>
+                <div class="discord-order-row"><span>Zwischensumme</span><span>149,99&nbsp;€</span></div>
+                <div class="discord-order-row"><span>Versand</span><span>0,00&nbsp;€</span></div>
+                <div class="discord-order-row"><span>Steuern</span><span>23,94&nbsp;€</span></div>
+                <div class="discord-order-row discord-order-total"><span>Gesamt</span><span>149,99&nbsp;€ EUR</span></div>
+              </div>
+              <div class="discord-reactions">
+                <span class="reaction">🔥 12</span>
+                <span class="reaction">❤️ 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pings-text order-1">
+        <p class="kicker reveal">Community</p>
+        <h2 class="reveal">Echte Wins, jeden Tag.</h2>
+        <p class="section-lead reveal">
+          Im <strong>success</strong>-Channel teilen Mitglieder täglich ihre Restocks — vom ersten
+          Boosterdisplay bis zum großen Lagerfund. Illustratives Beispiel oben, echte Posts warten
+          auf Discord auf dich.
+        </p>
+        <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary">Werde Teil der Erfolge</a>
+      </div>
+    </div>
+  </section>
+
   <!-- COMMUNITY -->
-  <section id="community" class="section">
+  <section id="community" class="section section-alt">
     <div class="container community-inner">
       <div class="community-text">
-        <p class="kicker">Community</p>
-        <h2>Für Sammler, Investoren &amp; Reseller.</h2>
-        <ul class="checklist">
+        <p class="kicker reveal">Community</p>
+        <h2 class="reveal">Für Sammler, Investoren &amp; Reseller.</h2>
+        <ul class="checklist reveal">
           <li>Sammler, die keinen Drop mehr verpassen wollen</li>
           <li>Investoren, die Markttrends früh erkennen möchten</li>
           <li>Reseller, die auf zuverlässige Restock-Infos angewiesen sind</li>
         </ul>
         <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary">Jetzt kostenlos beitreten</a>
       </div>
-      <div class="community-card">
+      <div class="community-card reveal">
         <img src="assets/logo.png" alt="Team Restocks" class="community-logo">
         <p class="community-quote">„Nie wieder einen Restock verpassen. Nie wieder einen Drop verpassen.“</p>
       </div>
@@ -142,16 +307,43 @@
   </section>
 
   <!-- INSTAGRAM -->
-  <section id="instagram" class="section section-alt">
+  <section id="instagram" class="section">
     <div class="container">
-      <p class="kicker">Folge uns</p>
-      <h2>@cardcartelcrew auf Instagram</h2>
-      <p class="section-lead">
+      <p class="kicker reveal">Folge uns</p>
+      <h2 class="reveal">@cardcartelcrew auf Instagram</h2>
+      <p class="section-lead reveal">
         Für tägliche Set-Previews, Tin-Reveals und Markt-Updates folge Card Cartel Crew auch auf Instagram.
       </p>
-      <a href="https://www.instagram.com/cardcartelcrew/" target="_blank" rel="noopener" class="btn btn-outline">
+      <a href="https://www.instagram.com/cardcartelcrew/" target="_blank" rel="noopener" class="btn btn-outline reveal">
         Zum Instagram-Profil
       </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section section-alt">
+    <div class="container">
+      <p class="kicker reveal">FAQ</p>
+      <h2 class="reveal">Häufige Fragen</h2>
+
+      <div class="accordion reveal">
+        <div class="accordion-item">
+          <button class="accordion-trigger">Ist Team Restocks kostenlos?<span class="accordion-plus">+</span></button>
+          <div class="accordion-panel"><p>Ja. Der Beitritt zum Discord und alle Restock-Alerts sind komplett kostenlos.</p></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Brauche ich Vorerfahrung?<span class="accordion-plus">+</span></button>
+          <div class="accordion-panel"><p>Nein. Ob Sammler, Einsteiger oder erfahrener Reseller — unsere Guides und der Support helfen dir beim Start.</p></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Welche Produkte überwacht ihr?<span class="accordion-plus">+</span></button>
+          <div class="accordion-panel"><p>Aktuell Pokémon TCG, One Piece TCG und Magic: The Gathering, dazu lokale und EU-weite Deals über MyDealz &amp; Reddit.</p></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Wie schnell sind die Alerts?<span class="accordion-plus">+</span></button>
+          <div class="accordion-panel"><p>Unsere Monitore laufen 24/7 und pingen dich in Echtzeit, sobald ein Produkt verfügbar wird.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -159,9 +351,9 @@
   <section id="join" class="section cta-section">
     <div class="container cta-inner">
       <img src="assets/logo.png" alt="Team Restocks" class="cta-logo">
-      <h2>Bereit für deinen nächsten Restock?</h2>
-      <p>Tritt Team Restocks auf Discord bei — kostenlos, in Sekunden.</p>
-      <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+      <h2 class="reveal">Bereit für deinen nächsten Restock?</h2>
+      <p class="reveal">Tritt Team Restocks auf Discord bei — kostenlos, in Sekunden.</p>
+      <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary btn-lg btn-pulse reveal">
         Discord beitreten
       </a>
     </div>
@@ -183,6 +375,6 @@
   </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script src="js/script.js?v=2"></script>
 </body>
 </html>
