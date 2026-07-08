@@ -3,8 +3,12 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
 
+navToggle.setAttribute('aria-expanded', 'false');
+navToggle.setAttribute('aria-controls', 'mainNav');
+
 navToggle.addEventListener('click', () => {
-  mainNav.classList.toggle('is-open');
+  const open = mainNav.classList.toggle('is-open');
+  navToggle.setAttribute('aria-expanded', String(open));
 });
 
 mainNav.querySelectorAll('a').forEach(link => {
@@ -37,9 +41,17 @@ const revealObserver = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function animateCount(el) {
   const target = parseInt(el.dataset.count, 10);
   const suffix = el.dataset.suffix || '';
+
+  if (reducedMotion) {
+    el.textContent = target + suffix;
+    return;
+  }
+
   const duration = 1400;
   const start = performance.now();
 
@@ -68,6 +80,8 @@ const countObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
 
 document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+  trigger.setAttribute('aria-expanded', 'false');
+
   trigger.addEventListener('click', () => {
     const item = trigger.parentElement;
     const panel = trigger.nextElementSibling;
@@ -77,15 +91,18 @@ document.querySelectorAll('.accordion-trigger').forEach(trigger => {
       if (openItem !== item) {
         openItem.classList.remove('is-open');
         openItem.querySelector('.accordion-panel').style.maxHeight = null;
+        openItem.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
       }
     });
 
     if (isOpen) {
       item.classList.remove('is-open');
       panel.style.maxHeight = null;
+      trigger.setAttribute('aria-expanded', 'false');
     } else {
       item.classList.add('is-open');
       panel.style.maxHeight = panel.scrollHeight + 'px';
+      trigger.setAttribute('aria-expanded', 'true');
     }
   });
 });
