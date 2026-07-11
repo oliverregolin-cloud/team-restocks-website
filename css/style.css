@@ -687,6 +687,25 @@ a { color: inherit; text-decoration: none; }
 }
 .legal-container a { color: var(--gold-light); text-decoration: underline; }
 .legal-updated { margin-top: 40px; font-size: 13px; opacity: 0.7; }
+.legal-placeholder-banner {
+  background: rgba(180, 34, 44, 0.12);
+  border: 1px solid var(--red);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 36px;
+}
+.legal-form-box {
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 18px 0;
+}
+.legal-form-box p { margin: 0 0 14px; }
+.legal-form-box p:last-child { margin-bottom: 0; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
