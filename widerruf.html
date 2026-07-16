@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://oliverregolin-cloud.github.io/team-restocks-website/widerruf.html">
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=1">
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -37,6 +37,54 @@
     <div class="container legal-container">
 
       <h1>Widerrufsbelehrung</h1>
+
+      <div class="widerruf-widget" id="widerruf-button">
+        <h2 class="widerruf-widget-title">Vertrag widerrufen</h2>
+        <p>
+          Du möchtest deine Team-Restocks-Mitgliedschaft widerrufen? Nutze den Button unten — ganz ohne
+          Login und ohne Angabe von Gründen. Wir bestätigen dir den Eingang deines Widerrufs anschließend
+          per E-Mail.
+        </p>
+
+        <button type="button" class="btn btn-primary btn-lg" id="widerrufStartBtn">Vertrag widerrufen</button>
+
+        <div class="widerruf-step" id="widerrufStep1" hidden>
+          <p class="widerruf-step-label">Schritt 1 von 2 — Vertrag identifizieren</p>
+          <div class="widerruf-field">
+            <label for="wdName">Name *</label>
+            <input type="text" id="wdName" autocomplete="name" required>
+          </div>
+          <div class="widerruf-field">
+            <label for="wdEmail">E-Mail-Adresse * <span class="widerruf-hint">(für die Eingangsbestätigung)</span></label>
+            <input type="email" id="wdEmail" autocomplete="email" required>
+          </div>
+          <div class="widerruf-field">
+            <label for="wdOrder">Bestellnummer oder Bestell-/Beitrittsdatum <span class="widerruf-hint">(optional, hilft bei der Zuordnung)</span></label>
+            <input type="text" id="wdOrder" autocomplete="off">
+          </div>
+          <button type="button" class="btn btn-outline" id="widerrufNextBtn">Weiter</button>
+          <p class="widerruf-error" id="widerrufError" hidden>Bitte fülle Name und E-Mail-Adresse aus.</p>
+        </div>
+
+        <div class="widerruf-step" id="widerrufStep2" hidden>
+          <p class="widerruf-step-label">Schritt 2 von 2 — Widerruf bestätigen</p>
+          <div class="widerruf-declaration" id="widerrufDeclaration"></div>
+          <button type="button" class="btn btn-primary" id="widerrufConfirmBtn">Widerruf jetzt absenden</button>
+          <button type="button" class="widerruf-back" id="widerrufBackBtn">Zurück</button>
+        </div>
+
+        <div class="widerruf-step" id="widerrufDone" hidden>
+          <p>
+            ✓ Deine E-Mail-App sollte sich mit deiner vorausgefüllten Widerrufserklärung geöffnet haben.
+            Bitte sende die E-Mail von dort ab. Nach Eingang bestätigen wir dir den Widerruf per E-Mail an
+            <span id="widerrufConfirmEmail"></span>.
+          </p>
+          <p>
+            Öffnet sich nichts automatisch? Sende die Erklärung einfach selbst an
+            <a href="mailto:restock@teamrestocks.de">restock@teamrestocks.de</a>.
+          </p>
+        </div>
+      </div>
 
       <h2>Widerrufsrecht</h2>
       <p>
@@ -131,7 +179,7 @@
       <a href="https://www.tiktok.com/@teamrestocks" target="_blank" rel="noopener">TikTok</a>
       <a href="impressum.html">Impressum</a>
       <a href="agb.html">AGB</a>
-      <a href="widerruf.html">Widerruf</a>
+      <a href="widerruf.html#widerruf-button">Widerruf</a>
       <a href="datenschutz.html">Datenschutz</a>
     </div>
     <p class="footer-copy">&copy; <span id="year"></span> Team Restocks. Alle Rechte vorbehalten.</p>
@@ -140,5 +188,6 @@
 
 <script src="js/consent.js?v=1"></script>
 <script src="js/script.js?v=11"></script>
+<script src="js/widerruf.js?v=1"></script>
 </body>
 </html>
