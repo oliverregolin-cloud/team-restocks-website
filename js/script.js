@@ -37,9 +37,36 @@ const revealObserver = new IntersectionObserver(entries => {
       revealObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.15 });
+  // Trigger as soon as an element edges into view (threshold 0). A fixed
+  // ratio like 0.15 never fires for elements taller than the viewport
+  // (e.g. long legal pages), which would leave them stuck at opacity 0.
+}, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+document.querySelectorAll('.reveal').forEach(el => {
+  // Elements taller than the viewport (e.g. long legal pages) can't enter the
+  // observer's view enough to trigger, and the opacity transition doesn't
+  // render cleanly on them — both leave the element stuck at opacity 0. Drop
+  // the reveal treatment entirely so they render normally (opacity 1).
+  if (el.offsetHeight > window.innerHeight) {
+    el.classList.remove('reveal');
+  } else {
+    revealObserver.observe(el);
+  }
+});
+
+// Safety net: if the observer hasn't revealed an in-view element within 1.5s
+// (e.g. it never fires in a given environment), drop its reveal treatment so
+// it renders normally (opacity 1) — this doesn't depend on the CSS transition
+// running. Below-fold elements are left untouched so they still animate on
+// scroll.
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.remove('reveal');
+    }
+  });
+}, 1500);
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
