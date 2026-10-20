@@ -19,6 +19,14 @@
 
 * { box-sizing: border-box; }
 
+/* Winkel des umlaufenden Lichts an den Discord-Fenstern - als registrierte
+   Eigenschaft, damit er sich animieren laesst. */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -185,8 +193,9 @@ picture { display: contents; }
   font-weight: 700;
   font-size: 15px;
   border: 1px solid transparent;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, translate 0.3s ease-out;
   cursor: pointer;
+  translate: var(--mgx, 0px) var(--mgy, 0px);
 }
 .btn .icon { width: 20px; height: 20px; }
 
@@ -206,7 +215,7 @@ picture { display: contents; }
   transform: translateY(-2px);
   box-shadow: 0 10px 26px rgba(180, 34, 44, 0.5);
   background-position: -10% 0, 0 0;
-  transition: transform 0.2s, box-shadow 0.2s, background-position 0.8s ease;
+  transition: transform 0.2s, box-shadow 0.2s, background-position 0.8s ease, translate 0.3s ease-out;
 }
 
 .btn-outline {
@@ -321,7 +330,7 @@ picture { display: contents; }
   padding-top: 32px;
   border-top: 1px solid var(--border);
   width: 100%;
-  max-width: 560px;
+  max-width: 760px;
 }
 
 .stat { display: flex; flex-direction: column; align-items: center; }
@@ -796,6 +805,17 @@ picture { display: contents; }
 .footer-links a:hover { color: var(--gold-light); }
 .footer-copy { color: var(--text-muted); font-size: 13px; margin: 0; }
 
+/* ---------- Neigung (3D-Tilt) ---------- */
+/* script.js setzt --tilt als Drehachse + Winkel, solange der Mauszeiger auf
+   dem Element liegt. Die Regel steht bewusst vor dem Reveal-Block: beim
+   Einblenden gilt dessen Uebergang, danach dieser. */
+.feature-grid, .process-grid, .tool-grid { perspective: 1100px; }
+.pings-inner, .success-inner { perspective: 1600px; }
+.has-tilt {
+  rotate: var(--tilt, none);
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, rotate 0.3s ease-out;
+}
+
 /* ---------- Reveal animation ---------- */
 .reveal {
   opacity: 0;
@@ -813,15 +833,105 @@ picture { display: contents; }
 
 /* ---------- Animationen & Uebergaenge ---------- */
 
-/* Hero: Logo, Zeile fuer Zeile Text, dann Buttons und Zahlen */
-.hero-logo-in {
+/* Hero-Muenze: fliegt ein, schwebt, neigt sich zum Mauszeiger, glaenzt
+   holografisch und dreht sich beim Ueberfahren oder Antippen einmal. */
+.hero-inner { perspective: 900px; }
+.coin {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 24px;
+  isolation: isolate;
+  cursor: pointer;
+  rotate: var(--tilt, none);
+  transition: rotate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   animation:
-    hero-logo-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both,
-    float 5s ease-in-out 1s infinite;
+    coin-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    coin-float 5s ease-in-out 1s infinite;
 }
-@keyframes hero-logo-in {
+.coin.is-flipping {
+  animation:
+    coin-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    coin-float 5s ease-in-out 1s infinite,
+    coin-flip 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.coin .hero-logo {
+  display: block;
+  margin-bottom: 0;
+}
+@keyframes coin-in {
   from { opacity: 0; transform: translateY(18px) scale(0.6) rotate(-12deg); }
-  to   { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes coin-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -14px; }
+}
+@keyframes coin-flip {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+/* Folie und Lichtreflex nehmen das Muenzbild selbst als Maske, sitzen also
+   exakt auf der runden Muenze. */
+.coin::before,
+.coin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url("../assets/logo-320.png") center / 100% 100% no-repeat;
+  mask: url("../assets/logo-320.png") center / 100% 100% no-repeat;
+}
+.coin::before {
+  background: linear-gradient(115deg,
+    transparent 20%,
+    rgba(255, 120, 160, 0.55) 32%,
+    rgba(255, 220, 120, 0.55) 40%,
+    rgba(120, 255, 200, 0.5) 48%,
+    rgba(120, 180, 255, 0.55) 56%,
+    rgba(210, 130, 255, 0.5) 64%,
+    transparent 76%) no-repeat;
+  background-size: 300% 300%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.35;
+  animation: holo-shift 6s ease-in-out infinite alternate;
+}
+.coin::after {
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 45%);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.coin.is-lit::before {
+  opacity: 0.6;
+  animation: none;
+  background-position: var(--gx, 50%) var(--gy, 50%);
+}
+.coin.is-lit::after { opacity: 1; }
+@keyframes holo-shift {
+  from { background-position: 0% 0%; }
+  to   { background-position: 100% 100%; }
+}
+
+/* Partikel-Leinwand (Funkeln, das nach oben steigt und dem Mauszeiger ausweicht) */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  translate: 0 calc(var(--hs, 0) * -90px);
+}
+
+/* Parallaxe: --px/--py (Mauszeiger, -1 bis 1) und --hs (Scroll, 0 bis 1)
+   setzt script.js am Hero. */
+/* Der Inhalt verblasst erst ab halber Strecke - auf dem Handy ist der Hero
+   hoeher als der Bildschirm, Buttons und Zahlen sollen dort voll sichtbar
+   bleiben, waehrend man zu ihnen scrollt. */
+.hero-inner {
+  translate: 0 calc(var(--hs, 0) * 70px);
+  opacity: calc(1 - max(0, var(--hs, 0) - 0.45) * 1.6);
 }
 
 .hero-in { animation: hero-in 0.8s cubic-bezier(0.2, 0.65, 0.25, 1) both; }
@@ -838,7 +948,7 @@ picture { display: contents; }
 /* Laufen CSS-Animationen nie an (Vorschauen ohne Bildaufbau, im Hintergrund
    geoeffnete Tabs), setzt script.js .no-motion - dann ist alles sofort sichtbar. */
 .no-motion .hero-in,
-.no-motion .hero-logo-in,
+.no-motion .coin,
 .no-motion .text-gold { animation: none; }
 .no-motion .hero-cards span { animation: none; opacity: 0.55; transform: rotate(var(--r)); }
 .no-motion .reveal,
@@ -879,6 +989,45 @@ picture { display: contents; }
 .hero-cards span:nth-child(4) { top: 11%; right: 8%;  --r: 13deg;  --dur: 15s; animation-delay: 0.6s, -2s; }
 .hero-cards span:nth-child(5) { top: 54%; right: 4%;  --r: -8deg;  --dur: 17s; animation-delay: 0.9s, -6s; }
 .hero-cards span:nth-child(6) { top: 36%; right: 17%; --r: -3deg;  --dur: 19s; animation-delay: 1.2s, -10s; width: 72px; height: 100px; }
+.hero-cards {
+  translate: calc(var(--px, 0) * -14px) calc(var(--py, 0) * -10px + var(--hs, 0) * -150px);
+}
+.hero-cards span {
+  translate: calc(var(--px, 0) * var(--depth, 12) * 1px) calc(var(--py, 0) * var(--depth, 12) * 1px);
+  transition: translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.hero-cards span:nth-child(1) { --depth: -22; }
+.hero-cards span:nth-child(2) { --depth: 30; }
+.hero-cards span:nth-child(3) { --depth: -12; }
+.hero-cards span:nth-child(4) { --depth: 26; }
+.hero-cards span:nth-child(5) { --depth: -30; }
+.hero-cards span:nth-child(6) { --depth: 14; }
+
+/* Holografischer Streifen, der ueber jede Karte wandert */
+.hero-cards span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg,
+    transparent 35%,
+    rgba(160, 220, 255, 0.28) 44%,
+    rgba(255, 170, 240, 0.28) 50%,
+    rgba(255, 240, 160, 0.28) 56%,
+    transparent 65%) no-repeat;
+  background-size: 300% 100%;
+  animation: card-holo 7s ease-in-out infinite;
+}
+.hero-cards span:nth-child(2)::before { animation-delay: -1.4s; }
+.hero-cards span:nth-child(3)::before { animation-delay: -2.8s; }
+.hero-cards span:nth-child(4)::before { animation-delay: -4.2s; }
+.hero-cards span:nth-child(5)::before { animation-delay: -5.6s; }
+.hero-cards span:nth-child(6)::before { animation-delay: -0.7s; }
+@keyframes card-holo {
+  0%, 40%   { background-position: 120% 0; }
+  70%, 100% { background-position: -20% 0; }
+}
+
 @keyframes card-in { to { opacity: 0.55; } }
 @keyframes card-drift {
   from { transform: translateY(0) rotate(var(--r)); }
@@ -1041,6 +1190,90 @@ picture { display: contents; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
+/* Umlaufendes Licht am Rand der Discord-Fenster */
+.discord-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--border-angle),
+    transparent 0 64%,
+    rgba(242, 193, 78, 0.9) 76%,
+    rgba(227, 67, 80, 0.85) 84%,
+    transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: border-spin 5s linear infinite;
+}
+@keyframes border-spin { to { --border-angle: 360deg; } }
+
+/* Scanner-Linie, die wie ein Monitor ueber den Hintergrund faehrt */
+.bg-grid::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 140px;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(217, 165, 32, 0.12) 70%,
+    rgba(242, 193, 78, 0.45) 98%,
+    transparent);
+  will-change: transform;
+  animation: scan 9s linear infinite;
+}
+@keyframes scan {
+  from { transform: translateY(-160px); }
+  to   { transform: translateY(110vh); }
+}
+
+/* Zahlen ploppen auf, sobald sie fertig hochgezaehlt sind */
+.stat-num.is-counted { animation: stat-pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes stat-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); text-shadow: 0 0 22px rgba(242, 193, 78, 0.75); }
+  100% { transform: scale(1); }
+}
+
+/* Icons huepfen beim Ueberfahren der Karte */
+.feature-card:hover .feature-icon,
+.process-card:hover .process-icon,
+.tool-card:hover .tool-icon { animation: icon-pop 0.6s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes icon-pop {
+  0%   { transform: scale(1) rotate(0); }
+  40%  { transform: scale(1.25) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Funkenregen beim Klick auf "Discord beitreten" */
+.spark-burst {
+  position: fixed;
+  z-index: 100;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.spark-burst span {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--spark, var(--gold-light));
+  box-shadow: 0 0 8px var(--spark, var(--gold-light));
+  animation: spark-fly 0.8s cubic-bezier(0.15, 0.6, 0.3, 1) forwards;
+}
+@keyframes spark-fly {
+  from { transform: translate(0, 0) scale(1); opacity: 1; }
+  to   { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}
+
 /* Weicher Uebergang beim Wechsel zwischen den Seiten (Chrome, Edge, Safari).
    Die Kopfzeile bleibt stehen, nur der Inhalt blendet um. */
 @view-transition { navigation: auto; }
@@ -1096,7 +1329,11 @@ picture { display: contents; }
   .main-nav.is-open { display: flex; }
   .nav-toggle { display: flex; }
   .feature-grid { grid-template-columns: 1fr; }
-  .hero-stats { gap: 28px; }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 16px;
+  }
   .discord-embed-main { flex-direction: column; }
   .discord-embed-fields { grid-template-columns: 1fr 1fr; }
   .discord-order-row span:first-child { white-space: normal; }
@@ -1202,10 +1439,13 @@ picture { display: contents; }
   .btn, .feature-card, .process-card, .flag-pill { transition: none; }
   .tool-card, .tool-link, .tool-arrow { transition: none; }
   .error-links a { transition: none; }
-  .hero-in, .hero-logo-in, .text-gold, .hero-cards span,
+  .hero-in, .coin, .coin::before, .text-gold, .hero-cards span, .hero-cards span::before,
+  .discord-window::after, .bg-grid::after, .stat-num.is-counted,
   .bg-glow::before, .bg-glow::after,
   .live-dot, .status-instock, .typing-dots span, .marquee-track { animation: none; }
-  .hero-cards { display: none; }
+  .hero-cards, .hero-particles { display: none; }
+  .coin, .has-tilt { rotate: none; }
+  .btn { translate: none; }
   .site-header, .main-nav a::after, .discord-msg, .discord-typing,
   .has-spotlight::before { transition: none; }
   .btn-primary:hover { background-position: 110% 0, 0 0; }

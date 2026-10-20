@@ -34,7 +34,7 @@
 <link rel="preload" href="assets/fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/rajdhani-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=1">
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="css/style.css?v=17">
 
 <script type="application/ld+json">
 {
@@ -226,11 +226,14 @@
     <div class="hero-cards" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
+    <canvas class="hero-particles" aria-hidden="true"></canvas>
     <div class="container hero-inner">
-      <picture>
-        <source srcset="assets/logo-320.webp" type="image/webp">
-        <img src="assets/logo-320.png" alt="Team Restocks Logo" class="hero-logo hero-logo-in" width="150" height="150" fetchpriority="high" decoding="async">
-      </picture>
+      <div class="coin">
+        <picture>
+          <source srcset="assets/logo-320.webp" type="image/webp">
+          <img src="assets/logo-320.png" alt="Team Restocks Logo" class="hero-logo" width="150" height="150" fetchpriority="high" decoding="async">
+        </picture>
+      </div>
       <p class="eyebrow hero-in hero-in-1">📈 Pokémon TCG Alerts &amp; Market Updates</p>
       <h1 class="hero-in hero-in-2">Verpasse nie wieder<br><span class="text-gold">einen Restock.</span></h1>
       <p class="hero-sub hero-in hero-in-3">
@@ -251,6 +254,8 @@
 
       <div class="hero-stats hero-in hero-in-5">
         <div class="stat"><span class="stat-num" data-count="2000" data-suffix="+">0</span><span class="stat-label">überwachte Shops</span></div>
+        <div class="stat"><span class="stat-num" data-count="6">0</span><span class="stat-label">Kartenspiele</span></div>
+        <div class="stat"><span class="stat-num" data-count="4">0</span><span class="stat-label">eigene Tools</span></div>
         <div class="stat"><span class="stat-num" data-static="24/7">0</span><span class="stat-label">Support</span></div>
       </div>
     </div>
@@ -877,6 +882,6 @@
 </footer>
 
 <script src="js/consent.js?v=1"></script>
-<script src="js/script.js?v=13"></script>
+<script src="js/script.js?v=14"></script>
 </body>
 </html>

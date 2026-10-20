@@ -1,6 +1,7 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
@@ -96,15 +97,22 @@ setTimeout(() => {
 }, 1500);
 
 // The hero entrance is a CSS animation that starts at opacity 0. Where
-// animations never advance (previews that render no frames, tabs opened in
-// the background), the headline would stay invisible - so after two seconds
-// a still-hidden headline switches the whole page to its motionless state.
-setTimeout(() => {
+// animations never advance (previews that render no frames), the headline
+// would stay invisible - so a headline still hidden two seconds after the
+// page became visible switches the whole page to its motionless state. Tabs
+// opened in the background wait until they are brought to the front, so
+// they still get the entrance.
+function checkHeroShown() {
+  if (document.hidden) {
+    document.addEventListener('visibilitychange', () => setTimeout(checkHeroShown, 2000), { once: true });
+    return;
+  }
   const headline = document.querySelector('.hero h1');
   if (headline && getComputedStyle(headline).opacity === '0') {
     document.documentElement.classList.add('no-motion');
   }
-}, 2000);
+}
+setTimeout(checkHeroShown, 2000);
 
 function animateCount(el) {
   const target = parseInt(el.dataset.count, 10);
@@ -123,6 +131,7 @@ function animateCount(el) {
     const eased = 1 - Math.pow(1 - progress, 3);
     el.textContent = Math.round(eased * target).toLocaleString('de-DE') + suffix;
     if (progress < 1) requestAnimationFrame(tick);
+    else el.classList.add('is-counted');
   }
   requestAnimationFrame(tick);
 }
@@ -237,7 +246,7 @@ if (pingList && !reducedMotion) {
 }
 
 // A soft glow follows the pointer across the cards (mouse and trackpad only).
-if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+if (finePointer) {
   document.querySelectorAll('.feature-card, .tool-card, .process-card').forEach(card => {
     card.classList.add('has-spotlight');
     card.addEventListener('pointermove', event => {
@@ -270,4 +279,254 @@ if (navLinks.length) {
   window.addEventListener('scroll', () => {
     if (window.scrollY < 120) navLinks.forEach(link => link.classList.remove('is-active'));
   }, { passive: true });
+}
+
+// ---- Hero: coin, parallax and sparkles -------------------------------------
+const hero = document.querySelector('.hero');
+if (hero && !reducedMotion) {
+  const coin = hero.querySelector('.coin');
+  let heroHeight = hero.offsetHeight;
+
+  // Scrolling away lifts the cards faster than the content and fades the text.
+  let scrollFrame = 0;
+  window.addEventListener('scroll', () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      hero.style.setProperty('--hs', Math.min(1, window.scrollY / heroHeight).toFixed(3));
+    });
+  }, { passive: true });
+
+  // The coin flips once when touched, tapped or clicked.
+  if (coin) {
+    const flip = () => coin.classList.add('is-flipping');
+    coin.addEventListener('click', flip);
+    if (finePointer) coin.addEventListener('pointerenter', flip);
+    coin.addEventListener('animationend', event => {
+      if (event.animationName === 'coin-flip') coin.classList.remove('is-flipping');
+    });
+  }
+
+  // With a mouse, the pointer drives the card parallax, the coin tilt and the
+  // glare on the coin. Touch devices skip this: a finger on the hero is
+  // usually scrolling, not pointing.
+  if (finePointer) {
+    let pointer = null;
+    let pointerFrame = 0;
+    hero.addEventListener('pointermove', event => {
+      pointer = event;
+      if (pointerFrame) return;
+      pointerFrame = requestAnimationFrame(() => {
+        pointerFrame = 0;
+        const box = hero.getBoundingClientRect();
+        hero.style.setProperty('--px', (((pointer.clientX - box.left) / box.width) * 2 - 1).toFixed(3));
+        hero.style.setProperty('--py', (((pointer.clientY - box.top) / box.height) * 2 - 1).toFixed(3));
+        if (!coin) return;
+
+        const c = coin.getBoundingClientRect();
+        const x = Math.max(-1, Math.min(1, (pointer.clientX - (c.left + c.width / 2)) / (box.width / 2)));
+        const y = Math.max(-1, Math.min(1, (pointer.clientY - (c.top + c.height / 2)) / (box.height / 2)));
+        const angle = Math.min(1, Math.hypot(x, y)) * 24;
+        coin.style.setProperty('--tilt', `${(-y).toFixed(3)} ${x.toFixed(3)} 0 ${angle.toFixed(1)}deg`);
+        coin.style.setProperty('--gx', (((pointer.clientX - c.left) / c.width) * 100).toFixed(1) + '%');
+        coin.style.setProperty('--gy', (((pointer.clientY - c.top) / c.height) * 100).toFixed(1) + '%');
+      });
+    });
+    hero.addEventListener('pointerenter', () => coin && coin.classList.add('is-lit'));
+    hero.addEventListener('pointerleave', () => {
+      hero.style.removeProperty('--px');
+      hero.style.removeProperty('--py');
+      if (coin) {
+        coin.classList.remove('is-lit');
+        coin.style.removeProperty('--tilt');
+      }
+    });
+  }
+
+  // Golden sparkles rise behind the hero, linked by faint lines where they
+  // come close, and dodge the mouse.
+  const canvas = hero.querySelector('.hero-particles');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  if (ctx) {
+    const LINK = 110;
+    const mouse = { x: -9999, y: -9999 };
+    let width = 0;
+    let height = 0;
+    let sparks = [];
+    let running = false;
+    let frameId = 0;
+
+    const spawn = anywhere => ({
+      x: Math.random() * width,
+      y: anywhere ? Math.random() * height : height + 8,
+      r: 0.6 + Math.random() * 1.8,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: -(0.15 + Math.random() * 0.4),
+      phase: Math.random() * Math.PI * 2,
+      red: Math.random() < 0.2,
+    });
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = hero.clientWidth;
+      height = hero.clientHeight;
+      heroHeight = hero.offsetHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Only reseed when the size changed noticeably - mobile browsers fire
+      // resize whenever the address bar slides in or out.
+      const count = Math.round(Math.min(90, Math.max(26, (width * height) / 15000)));
+      if (Math.abs(count - sparks.length) > count * 0.2) {
+        sparks = Array.from({ length: count }, () => spawn(true));
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.lineWidth = 1;
+      for (let i = 0; i < sparks.length; i++) {
+        for (let j = i + 1; j < sparks.length; j++) {
+          const dist = Math.hypot(sparks[i].x - sparks[j].x, sparks[i].y - sparks[j].y);
+          if (dist < LINK) {
+            ctx.strokeStyle = `rgba(217, 165, 32, ${((1 - dist / LINK) * 0.12).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.moveTo(sparks[i].x, sparks[i].y);
+            ctx.lineTo(sparks[j].x, sparks[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const spark of sparks) {
+        const mx = spark.x - mouse.x;
+        const my = spark.y - mouse.y;
+        const md = Math.hypot(mx, my);
+        if (md < 120 && md > 0.1) {
+          const push = (1 - md / 120) * 1.4;
+          spark.x += (mx / md) * push;
+          spark.y += (my / md) * push;
+        }
+        spark.x += spark.vx;
+        spark.y += spark.vy;
+        spark.phase += 0.04;
+        if (spark.y < -10 || spark.x < -10 || spark.x > width + 10) Object.assign(spark, spawn(false));
+
+        const glow = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(spark.phase));
+        const colour = spark.red ? '227, 67, 80' : '242, 193, 78';
+        ctx.fillStyle = `rgba(${colour}, ${(glow * 0.18).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(spark.x, spark.y, spark.r * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = `rgba(${colour}, ${glow.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(spark.x, spark.y, spark.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      frameId = requestAnimationFrame(draw);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      frameId = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(frameId);
+    };
+
+    resize();
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    if (finePointer) {
+      hero.addEventListener('pointermove', event => {
+        const box = hero.getBoundingClientRect();
+        mouse.x = event.clientX - box.left;
+        mouse.y = event.clientY - box.top;
+      });
+      hero.addEventListener('pointerleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+    }
+
+    // Only draw while the hero is on screen and the tab is in front.
+    let heroOnScreen = true;
+    const update = () => (heroOnScreen && !document.hidden ? start() : stop());
+    new IntersectionObserver(entries => {
+      heroOnScreen = entries[0].isIntersecting;
+      update();
+    }).observe(hero);
+    document.addEventListener('visibilitychange', update);
+  }
+}
+
+// Cards and Discord windows lean towards the mouse.
+if (finePointer && !reducedMotion) {
+  [['.feature-card, .process-card, .tool-card', 9], ['.discord-window', 5]].forEach(([selector, maxDeg]) => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.add('has-tilt');
+      el.addEventListener('pointermove', event => {
+        const box = el.getBoundingClientRect();
+        const x = (event.clientX - box.left) / box.width - 0.5;
+        const y = (event.clientY - box.top) / box.height - 0.5;
+        const angle = Math.min(1, Math.hypot(x, y) * 2) * maxDeg;
+        el.style.setProperty('--tilt', `${(-y).toFixed(3)} ${x.toFixed(3)} 0 ${angle.toFixed(2)}deg`);
+      });
+      el.addEventListener('pointerleave', () => el.style.removeProperty('--tilt'));
+    });
+  });
+
+  // The red buttons follow the mouse a little while it is on them.
+  document.querySelectorAll('.btn-primary').forEach(btn => {
+    btn.addEventListener('pointermove', event => {
+      const box = btn.getBoundingClientRect();
+      btn.style.setProperty('--mgx', ((event.clientX - box.left - box.width / 2) * 0.22).toFixed(1) + 'px');
+      btn.style.setProperty('--mgy', ((event.clientY - box.top - box.height / 2) * 0.32).toFixed(1) + 'px');
+    });
+    btn.addEventListener('pointerleave', () => {
+      btn.style.removeProperty('--mgx');
+      btn.style.removeProperty('--mgy');
+    });
+  });
+}
+
+// A burst of sparks where someone clicks "Discord beitreten". The link opens
+// in a new tab, so the burst plays out on this page.
+if (!reducedMotion) {
+  const SPARK_COLOURS = ['#f2c14e', '#d9a520', '#e34350', '#fff3c4'];
+  document.querySelectorAll('a[href*="joinourserver.com"]').forEach(link => {
+    link.addEventListener('click', event => {
+      let x = event.clientX;
+      let y = event.clientY;
+      if (!x && !y) {
+        // Activated by keyboard: start from the middle of the link.
+        const box = link.getBoundingClientRect();
+        x = box.left + box.width / 2;
+        y = box.top + box.height / 2;
+      }
+      const burst = document.createElement('div');
+      burst.className = 'spark-burst';
+      burst.style.left = x + 'px';
+      burst.style.top = y + 'px';
+      for (let i = 0; i < 18; i++) {
+        const spark = document.createElement('span');
+        const angle = (i / 18) * Math.PI * 2 + Math.random() * 0.4;
+        const distance = 40 + Math.random() * 55;
+        spark.style.setProperty('--dx', (Math.cos(angle) * distance).toFixed(1) + 'px');
+        spark.style.setProperty('--dy', (Math.sin(angle) * distance).toFixed(1) + 'px');
+        spark.style.setProperty('--spark', SPARK_COLOURS[i % SPARK_COLOURS.length]);
+        burst.appendChild(spark);
+      }
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 900);
+    });
+  });
 }
