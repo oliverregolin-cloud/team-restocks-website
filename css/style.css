@@ -38,6 +38,9 @@ h1, h2, h3, .brand-name {
 
 a { color: inherit; text-decoration: none; }
 
+/* <picture> darf das Layout nicht veraendern: das <img> bleibt das Flex-Element. */
+picture { display: contents; }
+
 .container {
   max-width: var(--container);
   margin: 0 auto;
@@ -822,6 +825,47 @@ a { color: inherit; text-decoration: none; }
 .legal-form-box p { margin: 0 0 14px; }
 .legal-form-box p:last-child { margin-bottom: 0; }
 
+/* ---------- Fehlerseite 404 ---------- */
+.error-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+.error-inner .error-code {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: clamp(4.5rem, 14vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(217, 165, 32, 0.3);
+}
+.error-inner h1 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin: 12px 0 18px;
+}
+.error-inner > p {
+  color: var(--text-muted);
+  font-size: 16px;
+  margin: 0 auto 30px;
+  max-width: 480px;
+}
+.error-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  justify-content: center;
+  margin-top: 40px;
+}
+.error-links a {
+  color: var(--gold-light);
+  font-size: 14.5px;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s;
+}
+.error-links a:hover { border-bottom-color: var(--gold); }
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -833,6 +877,7 @@ a { color: inherit; text-decoration: none; }
   }
   .btn, .feature-card, .process-card, .flag-pill { transition: none; }
   .tool-card, .tool-link, .tool-arrow { transition: none; }
+  .error-links a { transition: none; }
 }
 
 /* ---------- Cookie / Consent Banner ---------- */

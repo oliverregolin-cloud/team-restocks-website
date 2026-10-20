@@ -1,0 +1,17 @@
+{
+  "name": "Team Restocks",
+  "short_name": "Team Restocks",
+  "description": "Pokémon TCG Restock-Alerts in Echtzeit, Instore-Infos und eigene Werkzeuge für Sammler, Investoren und Reseller.",
+  "lang": "de-DE",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "icons": [
+    { "src": "assets/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

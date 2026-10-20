@@ -1,0 +1,7 @@
+# robots.txt für teamrestocks.de
+# Die Seite ist vollständig öffentlich, es gibt nichts auszusperren.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://teamrestocks.de/sitemap.xml
