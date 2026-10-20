@@ -75,7 +75,7 @@ function animateCount(el) {
   const suffix = el.dataset.suffix || '';
 
   if (reducedMotion) {
-    el.textContent = target + suffix;
+    el.textContent = target.toLocaleString('de-DE') + suffix;
     return;
   }
 
@@ -85,7 +85,7 @@ function animateCount(el) {
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(eased * target) + suffix;
+    el.textContent = Math.round(eased * target).toLocaleString('de-DE') + suffix;
     if (progress < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);

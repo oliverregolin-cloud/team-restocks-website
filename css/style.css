@@ -494,6 +494,13 @@ picture { display: contents; }
   margin-bottom: 16px;
 }
 .regions-flags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+.regions-note {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 620px;
+  margin: 18px auto 0;
+}
 .flag-pill {
   background: var(--black-card);
   border: 1px solid var(--border);
@@ -736,7 +743,7 @@ picture { display: contents; }
 .footer-brand { gap: 10px; }
 .footer-logo { width: 32px; height: 32px; }
 .footer-brand .brand-name { font-size: 13px; }
-.footer-links { display: flex; gap: 22px; font-size: 14px; color: var(--text-muted); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 12px 22px; font-size: 14px; color: var(--text-muted); }
 .footer-links a:hover { color: var(--gold-light); }
 .footer-copy { color: var(--text-muted); font-size: 13px; margin: 0; }
 
