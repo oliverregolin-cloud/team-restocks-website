@@ -34,7 +34,7 @@
 <link rel="preload" href="assets/fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/rajdhani-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=1">
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=16">
 
 <script type="application/ld+json">
 {
@@ -223,19 +223,22 @@
 
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-cards" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
     <div class="container hero-inner">
       <picture>
         <source srcset="assets/logo-320.webp" type="image/webp">
-        <img src="assets/logo-320.png" alt="Team Restocks Logo" class="hero-logo float" width="150" height="150" fetchpriority="high" decoding="async">
+        <img src="assets/logo-320.png" alt="Team Restocks Logo" class="hero-logo hero-logo-in" width="150" height="150" fetchpriority="high" decoding="async">
       </picture>
-      <p class="eyebrow reveal">📈 Pokémon TCG Alerts &amp; Market Updates</p>
-      <h1 class="reveal">Verpasse nie wieder<br><span class="text-gold">einen Restock.</span></h1>
-      <p class="hero-sub reveal">
+      <p class="eyebrow hero-in hero-in-1">📈 Pokémon TCG Alerts &amp; Market Updates</p>
+      <h1 class="hero-in hero-in-2">Verpasse nie wieder<br><span class="text-gold">einen Restock.</span></h1>
+      <p class="hero-sub hero-in hero-in-3">
         🔥 Restocks · Neue Releases · Deals &nbsp;—&nbsp; 💎 Für Sammler, Investoren &amp; Reseller.
         Team Restocks überwacht Pokémon, One&nbsp;Piece, Magic, Lorcana, Dragon&nbsp;Ball und Riftbound in
         Echtzeit, damit du deinem nächsten Drop immer einen Schritt voraus bist.
       </p>
-      <div class="hero-actions reveal">
+      <div class="hero-actions hero-in hero-in-4">
         <a href="https://joinourserver.com/teamrestocks" target="_blank" rel="noopener" class="btn btn-primary btn-pulse">
           <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path fill="currentColor" d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.211.375-.457.883-.626 1.284a18.27 18.27 0 0 0-5.518 0A12.6 12.6 0 0 0 9.115 3a19.74 19.74 0 0 0-4.435 1.372C1.914 8.5 1.107 12.53 1.454 16.502a19.9 19.9 0 0 0 5.993 3.03c.483-.66.913-1.36 1.284-2.098a12.9 12.9 0 0 1-2.023-.973c.17-.124.336-.253.497-.386 3.902 1.8 8.13 1.8 11.986 0 .163.133.329.262.497.386-.645.386-1.324.71-2.027.976.373.738.803 1.437 1.285 2.096a19.83 19.83 0 0 0 6-3.03c.5-4.6-.72-8.598-3.63-12.134ZM8.68 14.081c-1.17 0-2.13-1.075-2.13-2.396 0-1.32.94-2.398 2.13-2.398 1.19 0 2.15 1.078 2.13 2.398 0 1.321-.94 2.396-2.13 2.396Zm6.64 0c-1.17 0-2.13-1.075-2.13-2.396 0-1.32.94-2.398 2.13-2.398 1.19 0 2.15 1.078 2.13 2.398 0 1.321-.93 2.396-2.13 2.396Z"/></svg>
           Discord beitreten
@@ -246,7 +249,7 @@
         </a>
       </div>
 
-      <div class="hero-stats reveal">
+      <div class="hero-stats hero-in hero-in-5">
         <div class="stat"><span class="stat-num" data-count="2000" data-suffix="+">0</span><span class="stat-label">überwachte Shops</span></div>
         <div class="stat"><span class="stat-num" data-static="24/7">0</span><span class="stat-label">Support</span></div>
       </div>
@@ -360,7 +363,7 @@
 
       <div class="regions reveal">
         <p class="regions-label">Shops im Monitor &mdash; eine Auswahl</p>
-        <div class="regions-flags">
+        <div class="regions-flags shop-pills">
           <span class="flag-pill">Pokémon Center</span>
           <span class="flag-pill">Thalia</span>
           <span class="flag-pill">Netto-Online</span>
@@ -516,6 +519,7 @@
         <div class="discord-titlebar">
           <span class="discord-hash">#</span>
           <span class="discord-channel">pings</span>
+          <span class="live-badge" aria-hidden="true"><span class="live-dot"></span>LIVE</span>
           <span class="discord-sub">Alle Restocks an einem Ort</span>
         </div>
         <div class="discord-messages">
@@ -798,7 +802,7 @@
       <p class="kicker reveal">FAQ</p>
       <h2 class="reveal">Häufige Fragen</h2>
 
-      <div class="accordion reveal">
+      <div class="accordion">
         <div class="accordion-item">
           <button class="accordion-trigger">Was kostet die Mitgliedschaft?<span class="accordion-plus">+</span></button>
           <div class="accordion-panel"><p>Team Restocks ist eine kostenpflichtige Mitgliedschaft. Die aktuellen Preise findest du auf unserer Beitrittsseite.</p></div>
@@ -873,6 +877,6 @@
 </footer>
 
 <script src="js/consent.js?v=1"></script>
-<script src="js/script.js?v=12"></script>
+<script src="js/script.js?v=13"></script>
 </body>
 </html>
